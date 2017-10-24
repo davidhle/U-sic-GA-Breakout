@@ -246,9 +246,11 @@ updateBall:
 	strle	ip, [r5, #16]
 	ble	.L35
 	ldr	r6, .L42+12
+	ldr	r7, [r6, #0]
 	ldr	ip, [r6, #20]
-	ldmia	r6, {r7, lr}	@ phole ldm
+	ldr	lr, [r6, #4]
 	ldr	r8, [r6, #24]
+	sub	r7, r7, #2
 	add	r2, r5, #24
 	ldmia	r2, {r2, r3}	@ phole ldm
 	str	ip, [sp, #8]

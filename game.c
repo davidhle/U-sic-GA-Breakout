@@ -122,7 +122,7 @@ void updateBall() {
 		if (ball.row <= 1) {
 			ball.rdel *= -1;
 		} else if (collision(ball.row, ball.col, ball.height, ball.width,
-										player.row, player.col, player.height, player.width)) {
+										player.row - 2, player.col, player.height, player.width)) {
 			ball.rdel *= -1;
 			ball.cdel = player.cDirection;
 		}

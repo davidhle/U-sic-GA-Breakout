@@ -2,6 +2,11 @@
 # 1 "<built-in>"
 # 1 "<command-line>"
 # 1 "main.c"
+
+
+
+
+
 # 1 "c:\\devkitarm\\bin\\../lib/gcc/arm-eabi/4.5.0/../../../../arm-eabi/include/stdlib.h" 1 3
 # 10 "c:\\devkitarm\\bin\\../lib/gcc/arm-eabi/4.5.0/../../../../arm-eabi/include/stdlib.h" 3
 # 1 "c:\\devkitarm\\bin\\../lib/gcc/arm-eabi/4.5.0/../../../../arm-eabi/include/machine/ieeefp.h" 1 3
@@ -456,7 +461,7 @@ extern long double wcstold (const wchar_t *, wchar_t **);
 
 
 
-# 2 "main.c" 2
+# 7 "main.c" 2
 # 1 "c:\\devkitarm\\bin\\../lib/gcc/arm-eabi/4.5.0/../../../../arm-eabi/include/stdio.h" 1 3
 # 34 "c:\\devkitarm\\bin\\../lib/gcc/arm-eabi/4.5.0/../../../../arm-eabi/include/stdio.h" 3
 # 1 "c:\\devkitarm\\bin\\../lib/gcc/arm-eabi/4.5.0/include/stddef.h" 1 3 4
@@ -852,7 +857,7 @@ int __srget_r (struct _reent *, FILE *);
 int __swbuf_r (struct _reent *, int, FILE *);
 # 687 "c:\\devkitarm\\bin\\../lib/gcc/arm-eabi/4.5.0/../../../../arm-eabi/include/stdio.h" 3
 
-# 3 "main.c" 2
+# 8 "main.c" 2
 # 1 "myLib.h" 1
 
 
@@ -906,12 +911,12 @@ void goToWin();
 void win();
 void goToLose();
 void lose();
-# 4 "main.c" 2
+# 9 "main.c" 2
 # 1 "text.h" 1
 
 void drawChar(int, int, char, unsigned short);
 void drawString(int, int, char *, unsigned short);
-# 5 "main.c" 2
+# 10 "main.c" 2
 # 1 "game.h" 1
 
 typedef struct {
@@ -973,27 +978,27 @@ void drawGame();
 void drawPlayer();
 void drawBall();
 void drawBlock(BLOCK *);
-# 6 "main.c" 2
+# 11 "main.c" 2
 # 1 "Splash.h" 1
 # 20 "Splash.h"
 extern const unsigned short SplashBitmap[38400];
-# 7 "main.c" 2
+# 12 "main.c" 2
 # 1 "tutorial.h" 1
 # 20 "tutorial.h"
 extern const unsigned short tutorialBitmap[38400];
-# 8 "main.c" 2
+# 13 "main.c" 2
 # 1 "win.h" 1
 # 20 "win.h"
 extern const unsigned short winBitmap[38400];
-# 9 "main.c" 2
+# 14 "main.c" 2
 # 1 "lose.h" 1
 # 20 "lose.h"
 extern const unsigned short loseBitmap[38400];
-# 10 "main.c" 2
+# 15 "main.c" 2
 # 1 "pause.h" 1
 # 20 "pause.h"
 extern const unsigned short pauseBitmap[38400];
-# 11 "main.c" 2
+# 16 "main.c" 2
 
 
 enum { SPLASH, TUTORIAL, GAME, PAUSE, WIN, LOSE };
