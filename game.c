@@ -10,22 +10,24 @@
 PLAYER player;
 BALL ball;
 BLOCK blocks[BLOCKCOUNT];
+BLOCK blocks2[BLOCKCOUNT];
 int blocksRemaining;
 int loseGame;
+int gamesLost;
 
 void initGame () {
 	initPlayer();
 	initBall();
 	initBlocks();
 	// Begin the logic for blocks that are active/erased
-	blocksRemaining = BLOCKCOUNT;
+	blocksRemaining = BLOCKCOUNT * 2;
 	// So that the user can also start a new game after losing
 	loseGame = 0;
 }
 
 // Initialize Player's Attributes
 void initPlayer() {
-	player.row = 156;
+	player.row = 153;
 	player.col = 110;
 	player.oldRow = player.row;
 	player.oldCol = player.col;
@@ -38,6 +40,7 @@ void initPlayer() {
 // Initialize pool of blocks
 void initBlocks() {
 	int row = 5;
+	int row2 = 50;
 	for (int i = 0; i < BLOCKCOUNT; i++) {
 		// Update row every 5 blocks
 		if (!(i % 5) && i != 0) {
@@ -58,6 +61,27 @@ void initBlocks() {
 		// Mod since col will eventually be greater than 240
 		blocks[i].col = (4 + ((blocks[i].width + 8) * i )) % SCREENWIDTH;
 	}
+	for (int i = 0; i < BLOCKCOUNT; i++) {
+		// Update row every 5 blocks
+		if (!(i % 5) && i != 0) {
+			row2 += 15;
+		}
+		// Alternating colored blocks
+		if(i % 2) {
+			blocks2[i].color = RED;
+		} else {
+			blocks2[i].color = BLACK;
+		}
+		// Initialize attributes
+		blocks2[i].height = 10;
+		blocks2[i].width = 40;
+		blocks2[i].row = row2;
+		blocks2[i].active = 1;
+		blocks2[i].erased =  0;
+		// Mod since col will eventually be greater than 240
+		blocks2[i].col = (4 + ((blocks[i].width + 8) * i )) % SCREENWIDTH;
+	}
+
 }
 
 // Initialize Ball's Attributes
@@ -79,6 +103,7 @@ void updateGame() {
 	updateBall();
 	for (int i = 0; i < 15; i++) {
 		updateBlock(&blocks[i]);
+		updateBlock(&blocks2[i]);
 	}
 }
 
@@ -113,6 +138,8 @@ void updateBall() {
 			ball.oldCol = ball.col;
 				ball.col += ball.cdel * (3/2);
 		}
+	} else if (BUTTON_PRESSED(BUTTON_A) && ball.started) { // for faster wins
+		ball.cdel /= 2;
 	} else { // Once ball is released
 		ball.oldCol = ball.col;
 		ball.oldRow = ball.row;
@@ -133,6 +160,7 @@ void updateBall() {
 		// Hitting the grounds leads to lose
 		if (ball.row == 150) {
 			loseGame = 1;
+			gamesLost++;
 		}
 	}
 }
@@ -156,6 +184,7 @@ void drawGame() {
 	// Draw all of the blocks
 	for (int i = 0; i < BLOCKCOUNT; i++) {
 		drawBlock(&blocks[i]);
+		drawBlock(&blocks2[i]);
 	}
 }
 

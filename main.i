@@ -962,8 +962,10 @@ typedef struct {
 extern PLAYER player;
 extern BALL ball;
 extern BLOCK blocks[15];
+extern BLOCK blocks2[15];
 extern int blocksRemaining;
 extern int loseGame;
+extern int gamesLost;
 
 
 void initGame();
@@ -1007,12 +1009,13 @@ int state;
 
 unsigned short buttons;
 unsigned short oldButtons;
-
+int gamesLost;
 
 char buffer[41];
 
 int main() {
     initialize();
+    gamesLost = 0;
     while(1) {
 
         oldButtons = buttons;
@@ -1020,9 +1023,9 @@ int main() {
 
 
         switch(state) {
-         case SPLASH:
-          splash();
-          break;
+            case SPLASH:
+                splash();
+                break;
             case TUTORIAL:
                 tutorial();
                 break;
@@ -1051,14 +1054,14 @@ void initialize() {
 }
 
 void goToSplash() {
- drawFullscreenImage(SplashBitmap);
- state = SPLASH;
+    drawFullscreenImage(SplashBitmap);
+    state = SPLASH;
 }
 
 void splash() {
- if ((!(~(oldButtons)&((1<<3))) && (~buttons & ((1<<3))))) {
-  goToTutorial();
- }
+    if ((!(~(oldButtons)&((1<<3))) && (~buttons & ((1<<3))))) {
+        goToTutorial();
+    }
 }
 
 
@@ -1093,11 +1096,11 @@ void game() {
 
 
     if ((!(~(oldButtons)&((1<<3))) && (~buttons & ((1<<3))))) {
-     goToPause();
+        goToPause();
     } else if (blocksRemaining == 0) {
-     goToWin();
+        goToWin();
     } else if (loseGame) {
-     goToLose();
+        goToLose();
     }
 }
 
@@ -1136,7 +1139,7 @@ void win() {
     waitForVBlank();
 
     if ((!(~(oldButtons)&((1<<3))) && (~buttons & ((1<<3))))){
-     initialize();
+        initialize();
     }
 }
 
@@ -1145,6 +1148,10 @@ void goToLose() {
     drawFullscreenImage(loseBitmap);
 
     drawString(98,89, buffer, ((31) | (31)<<5 | (31)<<10));
+    if (gamesLost >= 2) {
+        drawRect(150, 0, 20, 100, ((31) | (0)<<5 | (0)<<10));
+        drawString(150, 1, "Tip: Press A after bouncing at an angle", ((0) | (31)<<5 | (0)<<10));
+    }
     state = LOSE;
 }
 

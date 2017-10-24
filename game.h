@@ -42,8 +42,10 @@ typedef struct {
 extern PLAYER player;
 extern BALL ball;
 extern BLOCK blocks[BLOCKCOUNT];
+extern BLOCK blocks2[BLOCKCOUNT];
 extern int blocksRemaining;
 extern int loseGame;
+extern int gamesLost;
 
 // Prototypes
 void initGame();

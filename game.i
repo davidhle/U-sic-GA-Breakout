@@ -556,8 +556,10 @@ typedef struct {
 extern PLAYER player;
 extern BALL ball;
 extern BLOCK blocks[15];
+extern BLOCK blocks2[15];
 extern int blocksRemaining;
 extern int loseGame;
+extern int gamesLost;
 
 
 void initGame();
@@ -594,22 +596,24 @@ extern const unsigned short BallRightBitmap[100];
 PLAYER player;
 BALL ball;
 BLOCK blocks[15];
+BLOCK blocks2[15];
 int blocksRemaining;
 int loseGame;
+int gamesLost;
 
 void initGame () {
  initPlayer();
  initBall();
  initBlocks();
 
- blocksRemaining = 15;
+ blocksRemaining = 15 * 2;
 
  loseGame = 0;
 }
 
 
 void initPlayer() {
- player.row = 156;
+ player.row = 153;
  player.col = 110;
  player.oldRow = player.row;
  player.oldCol = player.col;
@@ -622,6 +626,7 @@ void initPlayer() {
 
 void initBlocks() {
  int row = 5;
+ int row2 = 50;
  for (int i = 0; i < 15; i++) {
 
   if (!(i % 5) && i != 0) {
@@ -642,6 +647,27 @@ void initBlocks() {
 
   blocks[i].col = (4 + ((blocks[i].width + 8) * i )) % 240;
  }
+ for (int i = 0; i < 15; i++) {
+
+  if (!(i % 5) && i != 0) {
+   row2 += 15;
+  }
+
+  if(i % 2) {
+   blocks2[i].color = ((31) | (0)<<5 | (0)<<10);
+  } else {
+   blocks2[i].color = 0;
+  }
+
+  blocks2[i].height = 10;
+  blocks2[i].width = 40;
+  blocks2[i].row = row2;
+  blocks2[i].active = 1;
+  blocks2[i].erased = 0;
+
+  blocks2[i].col = (4 + ((blocks[i].width + 8) * i )) % 240;
+ }
+
 }
 
 
@@ -663,6 +689,7 @@ void updateGame() {
  updateBall();
  for (int i = 0; i < 15; i++) {
   updateBlock(&blocks[i]);
+  updateBlock(&blocks2[i]);
  }
 }
 
@@ -697,6 +724,8 @@ void updateBall() {
    ball.oldCol = ball.col;
     ball.col += ball.cdel * (3/2);
   }
+ } else if ((!(~(oldButtons)&((1<<0))) && (~buttons & ((1<<0)))) && ball.started) {
+  ball.cdel /= 2;
  } else {
   ball.oldCol = ball.col;
   ball.oldRow = ball.row;
@@ -717,6 +746,7 @@ void updateBall() {
 
   if (ball.row == 150) {
    loseGame = 1;
+   gamesLost++;
   }
  }
 }
@@ -740,6 +770,7 @@ void drawGame() {
 
  for (int i = 0; i < 15; i++) {
   drawBlock(&blocks[i]);
+  drawBlock(&blocks2[i]);
  }
 }
 

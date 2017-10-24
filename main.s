@@ -308,31 +308,56 @@ goToLose:
 	@ Function supports interworking.
 	@ args = 0, pretend = 0, frame = 0
 	@ frame_needed = 0, uses_anonymous_args = 0
-	stmfd	sp!, {r3, lr}
-	ldr	r0, .L38
-	ldr	r3, .L38+4
+	stmfd	sp!, {r4, lr}
+	ldr	r0, .L39
+	sub	sp, sp, #8
+	ldr	r3, .L39+4
 	mov	lr, pc
 	bx	r3
 	mov	r3, #32512
-	ldr	r2, .L38+8
 	add	r3, r3, #255
 	mov	r0, #98
 	mov	r1, #89
-	ldr	ip, .L38+12
+	ldr	r2, .L39+8
+	ldr	r4, .L39+12
+	mov	lr, pc
+	bx	r4
+	ldr	r3, .L39+16
+	ldr	r3, [r3, #0]
+	cmp	r3, #1
+	ble	.L38
+	mov	ip, #31
+	mov	r0, #150
+	mov	r1, #0
+	mov	r2, #20
+	mov	r3, #100
+	str	ip, [sp, #0]
+	ldr	ip, .L39+20
 	mov	lr, pc
 	bx	ip
-	ldr	r3, .L38+16
+	mov	r0, #150
+	mov	r1, #1
+	ldr	r2, .L39+24
+	mov	r3, #992
+	mov	lr, pc
+	bx	r4
+.L38:
+	ldr	r3, .L39+28
 	mov	r2, #5
 	str	r2, [r3, #0]
-	ldmfd	sp!, {r3, lr}
+	add	sp, sp, #8
+	ldmfd	sp!, {r4, lr}
 	bx	lr
-.L39:
+.L40:
 	.align	2
-.L38:
+.L39:
 	.word	loseBitmap
 	.word	drawFullscreenImage
 	.word	buffer
 	.word	drawString
+	.word	gamesLost
+	.word	drawRect
+	.word	.LC1
 	.word	state
 	.size	goToLose, .-goToLose
 	.align	2
@@ -343,55 +368,55 @@ game:
 	@ args = 0, pretend = 0, frame = 0
 	@ frame_needed = 0, uses_anonymous_args = 0
 	stmfd	sp!, {r4, lr}
-	ldr	r4, .L47
-	ldr	r3, .L47+4
+	ldr	r4, .L48
+	ldr	r3, .L48+4
 	mov	lr, pc
 	bx	r3
-	ldr	r1, .L47+8
+	ldr	r1, .L48+8
 	ldr	r2, [r4, #0]
-	ldr	r3, .L47+12
-	ldr	r0, .L47+16
+	ldr	r3, .L48+12
+	ldr	r0, .L48+16
 	mov	lr, pc
 	bx	r3
-	ldr	r3, .L47+20
+	ldr	r3, .L48+20
 	mov	lr, pc
 	bx	r3
-	ldr	r3, .L47+24
+	ldr	r3, .L48+24
 	mov	lr, pc
 	bx	r3
-	ldr	r3, .L47+28
+	ldr	r3, .L48+28
 	ldrh	r3, [r3, #0]
 	tst	r3, #8
-	beq	.L41
-	ldr	r3, .L47+32
+	beq	.L42
+	ldr	r3, .L48+32
 	ldrh	r3, [r3, #0]
 	tst	r3, #8
-	beq	.L44
-.L41:
+	beq	.L45
+.L42:
 	ldr	r3, [r4, #0]
 	cmp	r3, #0
-	beq	.L45
-	ldr	r3, .L47+36
+	beq	.L46
+	ldr	r3, .L48+36
 	ldr	r3, [r3, #0]
 	cmp	r3, #0
-	bne	.L46
+	bne	.L47
 	ldmfd	sp!, {r4, lr}
 	bx	lr
-.L46:
+.L47:
 	ldmfd	sp!, {r4, lr}
 	b	goToLose
-.L44:
-	ldmfd	sp!, {r4, lr}
-	b	goToPause
 .L45:
 	ldmfd	sp!, {r4, lr}
+	b	goToPause
+.L46:
+	ldmfd	sp!, {r4, lr}
 	b	goToWin
-.L48:
+.L49:
 	.align	2
-.L47:
+.L48:
 	.word	blocksRemaining
 	.word	updateGame
-	.word	.LC1
+	.word	.LC2
 	.word	sprintf
 	.word	buffer
 	.word	waitForVBlank
@@ -407,27 +432,27 @@ lose:
 	@ Function supports interworking.
 	@ args = 0, pretend = 0, frame = 0
 	@ frame_needed = 0, uses_anonymous_args = 0
-	ldr	r3, .L52
+	ldr	r3, .L53
 	stmfd	sp!, {r4, lr}
 	mov	lr, pc
 	bx	r3
-	ldr	r3, .L52+4
+	ldr	r3, .L53+4
 	ldrh	r3, [r3, #0]
 	tst	r3, #8
-	beq	.L49
-	ldr	r3, .L52+8
+	beq	.L50
+	ldr	r3, .L53+8
 	ldrh	r3, [r3, #0]
 	tst	r3, #8
-	beq	.L51
-.L49:
+	beq	.L52
+.L50:
 	ldmfd	sp!, {r4, lr}
 	bx	lr
-.L51:
+.L52:
 	ldmfd	sp!, {r4, lr}
 	b	initialize
-.L53:
+.L54:
 	.align	2
-.L52:
+.L53:
 	.word	waitForVBlank
 	.word	oldButtons
 	.word	buttons
@@ -441,55 +466,60 @@ main:
 	@ frame_needed = 0, uses_anonymous_args = 0
 	stmfd	sp!, {r3, r4, r5, r6, r7, lr}
 	bl	initialize
+	ldr	r3, .L68
+	mov	r2, #0
 	mov	r5, #67108864
-	ldr	r4, .L67
-	ldr	r7, .L67+4
-	ldr	r6, .L67+8
+	str	r2, [r3, #0]
+	ldr	r4, .L68+4
+	ldr	r7, .L68+8
+	ldr	r6, .L68+12
 	add	r5, r5, #256
-.L66:
+.L67:
 	ldrh	r3, [r4, #0]
 	ldr	r2, [r7, #0]
-.L56:
+.L57:
 	strh	r3, [r6, #0]	@ movhi
 	ldrh	r3, [r5, #48]
 	strh	r3, [r4, #0]	@ movhi
 	cmp	r2, #5
 	ldrls	pc, [pc, r2, asl #2]
-	b	.L56
-.L63:
-	.word	.L57
+	b	.L57
+.L64:
 	.word	.L58
 	.word	.L59
 	.word	.L60
 	.word	.L61
 	.word	.L62
-.L62:
+	.word	.L63
+.L63:
 	bl	lose
-	b	.L66
-.L61:
+	b	.L67
+.L62:
 	bl	win
-	b	.L66
-.L60:
+	b	.L67
+.L61:
 	bl	pause
-	b	.L66
-.L59:
+	b	.L67
+.L60:
 	bl	game
-	b	.L66
-.L58:
+	b	.L67
+.L59:
 	bl	tutorial
-	b	.L66
-.L57:
+	b	.L67
+.L58:
 	bl	splash
-	b	.L66
-.L68:
+	b	.L67
+.L69:
 	.align	2
-.L67:
+.L68:
+	.word	gamesLost
 	.word	buttons
 	.word	state
 	.word	oldButtons
 	.size	main, .-main
 	.comm	oldButtons,2,2
 	.comm	buttons,2,2
+	.comm	gamesLost,4,4
 	.comm	state,4,4
 	.comm	buffer,41,4
 	.section	.rodata.str1.4,"aMS",%progbits,1
@@ -498,5 +528,7 @@ main:
 	.ascii	"Blocks Remaining: \000"
 	.space	1
 .LC1:
+	.ascii	"Tip: Press A after bouncing at an angle\000"
+.LC2:
 	.ascii	"%d\000"
 	.ident	"GCC: (devkitARM release 31) 4.5.0"
